@@ -1,0 +1,141 @@
+/****************************************************************************************************/
+
+/*In case of CENTRAL_PACKAGE - comment out the below line to replace the other module definition*/
+
+/*var app = angular.module('centralCustom', ['angularLoad']);*/
+
+/****************************************************************************************************/
+/*Stackmap integration*/
+var s = document.createElement('script');
+s.id = 'localScript';
+s.src = 'https://www.stackmap.com/integration/usc-primo2/StackMap.js';
+document.body.appendChild(s);
+
+/*Add Link to Logo*/
+app.component('prmLogoAfterAppStoreGenerated', {
+    bindings: { parentCtrl: '<' },
+    controller: 'prmLogoAfterAppStoreGeneratedControllerAppStoreGenerated',
+    template: '<div class="product-logo product-logo-local" layout="row" layout-align="start center" layout-fill id="banner" tabindex="0" role="banner"> <a href="https://libraries.usc.edu"><img class="logo-image" alt="{{(\'nui.header.LogoAlt\' | translate)}}" ng-src="{{$ctrl.getIconLink()}}"/></a></div>'
+});
+app.controller('prmLogoAfterAppStoreGeneratedControllerAppStoreGenerated', [function () {
+    var vm = this;
+    vm.getIconLink = getIconLink;
+    function getIconLink() {
+        return vm.parentCtrl.iconLink;
+    }
+}]);
+
+/*Add Report a Problem Link below Send To*/
+app.component('prmActionListAfterAppStoreGenerated', {
+    template: '<br><a href="https://libraries.usc.edu/form/need-help-report-problem" target="_blank" style="float:right;">Need Help? Report a Problem</a>'
+});
+
+/*Google Analytics*/
+(function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments);
+        }, i[r].l = 1 * new Date();a = s.createElement(o), m = s.getElementsByTagName(o)[0];a.async = 1;a.src = g;m.parentNode.insertBefore(a, m);
+})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+ga('create', 'UA-101921431-1', 'auto');
+ga('send', 'pageview');
+
+// Add link to fines and fees payment - with IE
+//app.component('prmFinesAfterAppStoreGenerated', {
+//                template: '<a class="layout-align-center-center layout-column" id="payment-button" href="https://lotus.usc.edu/form.htm" target="_blank">Pay Fines</a>'
+//
+//});
+
+// BEGIN Add link to fines and fees payment - with IE
+
+var fine_button = '<a class="button-link md-button md-primoExplore-theme md-ink-ripple" id="payment-button" href="https://lotus.usc.edu/form.htm" target="_blank"><span>PAY FINE</span><prm-icon icon-type="svg" svg-icon-set="primo-ui" icon-definition="open-in-new"><md-icon md-svg-icon="primo-ui:open-in-new" alt="" class="md-primoExplore-theme" aria-hidden="true"></md-icon></prm-icon></a>';
+
+app.component('prmFinesOverviewAfterAppStoreGenerated', {
+    template: fine_button
+});
+
+app.component('prmFinesAfterAppStoreGenerated', {
+    template: fine_button
+});
+
+// END Add link to fines and fees payment - with IE
+
+
+
+
+//Auto generated code by primo app store DO NOT DELETE!!! -START-
+/*
+ hookName is a place holder with should hold the hook name not including "prm" at the beginning and in upper camel case
+ e.g: for hook prmSearchBarAfter (in html prm-search-bar-after) it should be given "SearchBarAfter"
+ */
+app.controller('ActionListAfterController', [function () {
+    var vm = this;
+}]);
+
+app.component('prmActionListAfter', {
+    bindings: { parentCtrl: '<' },
+    controller: 'ActionListAfterController',
+    template: '\n    <prm-action-list-after-app-store-generated parent-ctrl="$ctrl.parentCtrl"></prm-action-list-after-app-store-generated>\n'
+
+});
+
+//Auto generated code by primo app store DO NOT DELETE!!! -END-
+
+//Auto generated code by primo app store DO NOT DELETE!!! -START-
+/*
+ hookName is a place holder with should hold the hook name not including "prm" at the beginning and in upper camel case
+ e.g: for hook prmSearchBarAfter (in html prm-search-bar-after) it should be given "SearchBarAfter"
+ */
+app.controller('FinesAfterController', [function () {
+    var vm = this;
+}]);
+
+app.component('prmFinesAfter', {
+    bindings: { parentCtrl: '<' },
+    controller: 'FinesAfterController',
+    template: '\n    <prm-fines-after-app-store-generated parent-ctrl="$ctrl.parentCtrl"></prm-fines-after-app-store-generated>\n'
+
+});
+
+//Auto generated code by primo app store DO NOT DELETE!!! -END-
+
+//Auto generated code by primo app store DO NOT DELETE!!! -START-
+/*
+ hookName is a place holder with should hold the hook name not including "prm" at the beginning and in upper camel case
+ e.g: for hook prmSearchBarAfter (in html prm-search-bar-after) it should be given "SearchBarAfter"
+ */
+app.controller('FinesOverviewAfterController', [function () {
+    var vm = this;
+}]);
+
+app.component('prmFinesOverviewAfter', {
+    bindings: { parentCtrl: '<' },
+    controller: 'FinesOverviewAfterController',
+    template: '\n    <prm-fines-overview-after-app-store-generated parent-ctrl="$ctrl.parentCtrl"></prm-fines-overview-after-app-store-generated>\n'
+
+});
+
+//Auto generated code by primo app store DO NOT DELETE!!! -END-
+
+//Auto generated code by primo app store DO NOT DELETE!!! -START-
+/*
+ hookName is a place holder with should hold the hook name not including "prm" at the beginning and in upper camel case
+ e.g: for hook prmSearchBarAfter (in html prm-search-bar-after) it should be given "SearchBarAfter"
+ */
+app.controller('LogoAfterController', [function () {
+    var vm = this;
+}]);
+
+app.component('prmLogoAfter', {
+    bindings: { parentCtrl: '<' },
+    controller: 'LogoAfterController',
+    template: '\n    <prm-logo-after-app-store-generated parent-ctrl="$ctrl.parentCtrl"></prm-logo-after-app-store-generated>\n'
+
+});
+
+//Auto generated code by primo app store DO NOT DELETE!!! -END-
+
+
+
+
+
