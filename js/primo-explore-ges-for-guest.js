@@ -28,21 +28,22 @@ app.controller('removeSpecificRequestForLocationController', ['removeSpecificReq
     this.getFakeGuest = getFakeGuest;
     this.$onInit = function () {
         if (!this.parentCtrl.isLoggedIn()){
+            this.fakeGuest = true;
 
             this.parentCtrl.isLoggedIn = function() {
                 return true;
             };
 
             this.parentCtrl.getServicesFromIls();
-            $timeout(() => {
-                this.fakeGuest = true;
-                if(vm.services.serviceinfo){
-                    services2 = vm.services.serviceinfo;
-                    calculateRemove();
-                }
-
-            }, 3000);
         }
+
+        $timeout(() => {
+            if(vm.services.serviceinfo){
+                services2 = vm.services.serviceinfo;
+                calculateRemove();
+            }
+
+        }, 3000);
     };
 
     function getFakeGuest(){
