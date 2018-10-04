@@ -37,13 +37,16 @@ app.controller('removeSpecificRequestForLocationController', ['removeSpecificReq
             this.parentCtrl.getServicesFromIls();
         }
 
-        $timeout(() => {
-            if(vm.services.serviceinfo){
+        $scope.$watch(function () {
+            return vm.services ? vm.services.serviceinfo : undefined;
+        }, function () {
+            if (!services2 || (services2 && services2.length !== vm.services.serviceinfo.length)) {
                 services2 = vm.services.serviceinfo;
                 calculateRemove();
+            } else {
+                services2 = vm.services.serviceinfo;
             }
-
-        }, 3000);
+        });
     };
 
     function getFakeGuest(){
