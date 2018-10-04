@@ -27,39 +27,34 @@ app.controller('removeSpecificRequestForLocationController', ['removeSpecificReq
     this.fakeGuest = false;
     this.getFakeGuest = getFakeGuest;
     this.$onInit = function () {
-        if(!this.parentCtrl.isLoggedIn()){
+        if (!this.parentCtrl.isLoggedIn()){
+            this.fakeGuest = true;
 
             this.parentCtrl.isLoggedIn = function() {
                 return true;
-            }
+            };
 
             this.parentCtrl.getServicesFromIls();
-            let _this = this;
-            $timeout(function () {
-                _this.fakeGuest = true;
-                if(vm.services.serviceinfo){
-                    services2 = vm.services.serviceinfo;
-                    calculateRemove();
-                }
-
-            }, 3000);
         }
 
-
-
-    }
-
-
-
+        $scope.$watch(function () {
+            return vm.services ? vm.services.serviceinfo : undefined;
+        }, function () {
+            if (!services2 || (services2 && services2.length !== vm.services.serviceinfo.length)) {
+                services2 = vm.services.serviceinfo;
+                calculateRemove();
+            } else {
+                services2 = vm.services.serviceinfo;
+            }
+        });
+    };
 
     function getFakeGuest(){
         return this.fakeGuest;
     }
 
     function calculateRemove() {
-
         for (let addonParameter of addonParameters) {
-            matches = [];
             var libraryCode = addonParameter.libraryCode;
             var subLocationCodes = addonParameter.subLocationCode;
             var displayLabel = addonParameter.displayLabel;
@@ -69,9 +64,6 @@ app.controller('removeSpecificRequestForLocationController', ['removeSpecificReq
                 holding = vm.item.delivery.holding.filter(function (holding) {
                     return libraryCode === holding.libraryCode;
                 }).filter(function (holding) {
-                    if(subLocationCode.indexOf(holding.subLocationCode) !== -1){
-                        matches.push({libraryCode:holding.libraryCode,librarycodeTranslation:holding.librarycodeTranslation,subLocation:holding.subLocation,callNumber:holding.callNumber});
-                    }
                     return subLocationCode.indexOf(holding.subLocationCode) !== -1;
                 });
             }
@@ -79,34 +71,26 @@ app.controller('removeSpecificRequestForLocationController', ['removeSpecificReq
                 services2 = services2.filter(function (e) {
                     return displayLabel !== e.type;
                 });
-            }else{
+            }
+            else {
                 if (services2.length > 0) {
-                    services2.forEach(function (service) {
-                        if(matches && matches.length > 0){
-                            matches.forEach(function(match) {
-                                let clonedService = angular.copy(service);
-                                let link = clonedService['link-to-service'];
-                                let libraryName = match.librarycodeTranslation;
-                                link = link.replace(/location=&/, 'location=' + match.libraryCode+'&');
-                                link = link.replace(/site=(.*?)&/, 'site=' + match.subLocation+'&');
-                                link = link.replace(/callnum=&/, 'callnum=' + match.callNumber+'&');
-                                clonedService['link-to-service'] = link;
-                                //added the last dot as a hack - this way the translator will keep the text as is
-                                clonedService.type+='/'+libraryName+' '+match.subLocation+'('+match['callNumber']+').';
-                                if(servicesWithReolvedLinks === undefined){
-                                    servicesWithReolvedLinks = [];
-                                }
-                                servicesWithReolvedLinks.push(clonedService);
-                            });
+                    services2.forEach((service) => {
+                        if (holding && holding.length > 0 && service.type === displayLabel){
+                            let match = holding[0];
+                            let clonedService = angular.copy(service);
+                            let link = clonedService['link-to-service'];
+                            link = link.replace(/location=(&)?/, 'location=' + match.subLocation.toLowerCase()+'$1');
+                            link = link.replace(/callnum=(&)?/, 'callnum=' + match.callNumber+'$1');
+                            clonedService['link-to-service'] = link;
+
+                            if(servicesWithReolvedLinks === undefined){
+                                servicesWithReolvedLinks = [];
+                            }
+                            servicesWithReolvedLinks.push(clonedService);
                         }
-
-
                     });
                 }
             }
-
-
-
         }
         vm.services.serviceinfo = servicesWithReolvedLinks || services2;
     }
