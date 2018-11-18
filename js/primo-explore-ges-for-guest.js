@@ -21,7 +21,7 @@ app.constant('removeSpecificRequestForLocationStudioConfig', [
 ]);
 
 app.constant('aeonLocationsInternalExternalMap',
-    {"spe-graarc": "ARCHIVES GRAND", "spe-elb238": "BOECKMANN EAST 238", "spe-elb343": "BOECKMANN EAST 343-344", "spe-grarar": "RARE-BOOKS-GRAND", "spe-eassto": "SPECIAL COLLECTIONS EAST STORAGE", "spe-vltbrg": "VAULT-244B-REG", "spe-vltbwi": "VAULT-244B-WIDE", "spe-vltcre": "VAULT-244C-REG", "spe-vltflt": "VAULT-FLAT", "spe-vltovr": "VAULT-OVER", "spe-vltwid": "VAULT-WIDE", "cin-eassto": "EAST STORAGE"}
+    {"spe-ealeas": "EAST ASIAN STORAGE EAST", "spe-graarc": "ARCHIVES GRAND", "spe-elb238": "BOECKMANN EAST 238", "spe-elb343": "BOECKMANN EAST 343-344", "spe-grarar": "RARE-BOOKS-GRAND", "spe-eassto": "SPECIAL COLLECTIONS EAST STORAGE", "spe-vltbrg": "VAULT-244B-REG", "spe-vltbwi": "VAULT-244B-WIDE", "spe-vltcre": "VAULT-244C-REG", "spe-vltflt": "VAULT-FLAT", "spe-vltovr": "VAULT-OVER", "spe-vltwid": "VAULT-WIDE", "cin-eassto": "EAST STORAGE"}
 );
 
 app.controller('removeSpecificRequestForLocationController', ['removeSpecificRequestForLocationStudioConfig', '$scope','$timeout','$translate', 'aeonLocationsInternalExternalMap', function (addonParameters, $scope, $timeout, $translate, aeonLocationsInternalExternalMap) {
@@ -65,7 +65,6 @@ app.controller('removeSpecificRequestForLocationController', ['removeSpecificReq
             var displayLabel = addonParameter.displayLabel;
             var subLocationCode = subLocationCodes ? subLocationCodes.split(/\s*,\s*/) : subLocationCodes;
             var holding = [];
-            var genres = [];
 
             if (type === "AEON" && vm.item.delivery.holding) {
                 holding = vm.item.delivery.holding.filter(function (holding) {
@@ -73,16 +72,10 @@ app.controller('removeSpecificRequestForLocationController', ['removeSpecificReq
                 }).filter(function (holding) {
                     return subLocationCode.indexOf(holding.subLocationCode) !== -1;
                 });
-            } else if (type === "ILL" && vm.item.pnx.addata.genre) {
-                genres = vm.item.pnx.addata.genre.filter(genre => {
-                    return addonParameter.genres.indexOf(genre) !== -1;
-                });
             }
 
             var aeonAndHolding = (type === "AEON" && holding.length === 0);
-            var illAndGenres = (type === "ILL" && genres.length === 0);
-            var aeonOrGenres = aeonAndHolding || illAndGenres;
-            if (services2.length > 0 && aeonOrGenres) {
+            if (services2.length > 0 && aeonAndHolding) {
                 services2 = services2.filter(function (e) {
                     return displayLabel !== e.type;
                 });
@@ -91,7 +84,7 @@ app.controller('removeSpecificRequestForLocationController', ['removeSpecificReq
                 if (services2.length > 0) {
                     services2.forEach((service) => {
                         if (service.type === displayLabel) {
-                            if (holding.length > 0 || genres.length > 0) {
+                            if (holding.length > 0 || type === "ILL") {
                                 if (type === 'AEON') {
                                     let match = holding[0];
                                     let link = service['link-to-service'];
